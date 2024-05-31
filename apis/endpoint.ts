@@ -17,7 +17,7 @@ export const petBreedWithTypePath = (id: string | null) => {
 export const petTypePath = "pet-type?page=1&limit=10";
 //? pet
 export const userPetPath = "pet/me/pets?page=1&limit=10";
-export const userCreatePetPath = "/pet";
+export const userCreatePetPath = "/pet/mobile";
 
 //? upload
 export const uploadPath = "image/upload";

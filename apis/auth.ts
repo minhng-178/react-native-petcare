@@ -15,7 +15,7 @@ export const login = async (email: string, password: string) => {
       Alert.alert("Error", "Email or Password is incorrect");
     }
 
-    if (response.status === 201) {
+    if (response.status === 200) {
       return response.data;
     } else {
       console.log(response);

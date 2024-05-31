@@ -63,14 +63,15 @@ const AddPetScreen = () => {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
 
-    if (!result.canceled) {
-      setImage(result.assets[0]);
+    if (!result.canceled && result.assets[0]?.base64) {
+      setImage(`data:image/jpg;base64,` + result.assets[0].base64);
       setForm({ ...form, image: result.assets[0].uri });
     }
   };
@@ -151,24 +152,24 @@ const AddPetScreen = () => {
         <TextInput
           value={form.pet_name}
           onChangeText={(e) => setForm({ ...form, pet_name: e })}
-          placeholder='Tên thú cưng'
+          placeholder="Tên thú cưng"
           style={styles.input}
         />
 
         <TextInput
           value={form.weight}
           onChangeText={(e) => setForm({ ...form, weight: e })}
-          placeholder='Cân nặng(đơn vị kg)'
+          placeholder="Cân nặng(đơn vị kg)"
           style={styles.input}
-          keyboardType='numeric'
+          keyboardType="numeric"
         />
 
         <TextInput
           value={form.height}
           onChangeText={(e) => setForm({ ...form, height: e })}
-          placeholder='Chiều cao(đơn vị cm)'
+          placeholder="Chiều cao(đơn vị cm)"
           style={styles.input}
-          keyboardType='numeric'
+          keyboardType="numeric"
         />
 
         <View
@@ -180,7 +181,7 @@ const AddPetScreen = () => {
           }}
         >
           <Text onPress={showDatepicker} style={styles.textButton}>
-            <FontAwesome name='calendar-plus-o' size={18} /> Chọn ngày tháng năm
+            <FontAwesome name="calendar-plus-o" size={18} /> Chọn ngày tháng năm
             sinh
           </Text>
 
@@ -188,10 +189,10 @@ const AddPetScreen = () => {
         </View>
         {show && (
           <DateTimePicker
-            testID='dateTimePicker'
+            testID="dateTimePicker"
             value={form.pet_dob}
             mode={"date"}
-            display='default'
+            display="default"
             onChange={onChange}
           />
         )}
@@ -203,7 +204,7 @@ const AddPetScreen = () => {
             setForm({ ...form, pet_breed_id: itemValue })
           }
         >
-          <Picker.Item label='Xin hãy chọn giống thú cưng của bạn' value={""} />
+          <Picker.Item label="Xin hãy chọn giống thú cưng của bạn" value={""} />
           {petBreed?.map((breed: any) => (
             <Picker.Item
               key={breed.id}
