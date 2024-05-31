@@ -12,6 +12,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import Images from "@/constants/Images";
+import { useQuery } from "@tanstack/react-query";
+import { getBrands } from "@/apis/brand";
+import Loader from "./Loader";
 
 const cateTypes = [
   { name: "Thú y", image: Images.vet },
@@ -20,6 +23,11 @@ const cateTypes = [
 ];
 
 const Headers = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["brands"],
+    queryFn: getBrands,
+  });
+
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const handleCategoryPress = (categoryName: string) => {
@@ -27,6 +35,10 @@ const Headers = () => {
       prevActiveCategory === categoryName ? null : categoryName
     );
   };
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
+  }
 
   return (
     <View style={styles.container}>
@@ -87,7 +99,30 @@ const Headers = () => {
       </View>
 
       <Text style={styles.textHeader}>Thương hiệu nổi bật</Text>
-      <View style={styles.tabsContainer}></View>
+      <View style={styles.tabsContainer}>
+        <FlatList
+          data={data}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={[styles.tab, { borderColor: Colors.light.white }]}
+            >
+              <View>
+                <Image
+                  source={{
+                    uri: item.image || Images.petPlaceholder,
+                  }}
+                  style={styles.brandImage}
+                  resizeMode='cover'
+                />
+              </View>
+            </TouchableOpacity>
+          )}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ columnGap: Sizes.xxLarge }}
+          showsHorizontalScrollIndicator={false}
+          horizontal
+        />
+      </View>
     </View>
   );
 };
@@ -132,9 +167,10 @@ const styles = StyleSheet.create({
   },
   textHeader: {
     fontWeight: "bold",
-    fontSize: Sizes.medium,
+    fontSize: Sizes.large,
     marginRight: Sizes.small,
     marginTop: Sizes.medium,
+    color: Colors.light.primary,
   },
   tabsContainer: {
     width: "100%",
@@ -155,5 +191,11 @@ const styles = StyleSheet.create({
   categoryImage: {
     alignSelf: "center",
     aspectRatio: 1,
+  },
+  brandImage: {
+    alignSelf: "center",
+    aspectRatio: 1,
+    width: 200,
+    borderRadius: Sizes.small,
   },
 });

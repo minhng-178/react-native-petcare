@@ -6,21 +6,23 @@ import {
   View,
 } from "react-native";
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import Loader from "./Loader";
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
+import { getServices } from "@/apis/service";
 import PopularServiceItem from "./PopularServiceItem";
 
-const data = [
-  {
-    id: 1,
-    name: "Haircut",
-    rating: 4.5,
-    location: "uchiha madara",
-    image: "",
-  },
-];
-
 const PopularServices = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["service"],
+    queryFn: getServices,
+  });
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
+  }
   return (
     <View>
       <View style={styles.header}>
@@ -36,6 +38,7 @@ const PopularServices = () => {
           renderItem={({ item }) => <PopularServiceItem item={item} />}
           contentContainerStyle={{ columnGap: Sizes.medium }}
           horizontal
+          showsHorizontalScrollIndicator={false}
         />
       </View>
     </View>
@@ -57,6 +60,7 @@ const styles = StyleSheet.create({
     fontSize: Sizes.large,
     fontWeight: "bold",
     color: Colors.light.primary,
+    marginTop: Sizes.small,
   },
   headerBtn: {
     fontSize: Sizes.medium,

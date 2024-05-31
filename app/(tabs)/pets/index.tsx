@@ -24,6 +24,7 @@ export default function PetScreen() {
         data={data}
         renderItem={({ item }) => <PetListItem pets={item} />}
         contentContainerStyle={{ gap: 10, padding: 10 }}
+        showsVerticalScrollIndicator={false}
       />
       <Button
         style={styles.button}

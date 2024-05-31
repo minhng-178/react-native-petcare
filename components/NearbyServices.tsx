@@ -5,8 +5,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+
+import Loader from "./Loader";
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
+import { getServices } from "@/apis/service";
 import NearbyServiceItem from "./NearbyServiceItem";
 
 const data = [
@@ -20,6 +24,15 @@ const data = [
 ];
 
 const NearbyServices = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["service"],
+    queryFn: getServices,
+  });
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -33,7 +46,9 @@ const NearbyServices = () => {
         <FlatList
           data={data}
           renderItem={({ item }) => <NearbyServiceItem item={item} />}
-          contentContainerStyle={{ columnGap: Sizes.medium }}
+          contentContainerStyle={{
+            columnGap: Sizes.large,
+          }}
         />
       </View>
     </View>
@@ -44,7 +59,7 @@ export default NearbyServices;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Sizes.xLarge,
+    marginTop: Sizes.medium,
   },
   header: {
     flexDirection: "row",
@@ -63,6 +78,5 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     marginTop: Sizes.medium,
-    gap: Sizes.small,
   },
 });
