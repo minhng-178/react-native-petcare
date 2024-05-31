@@ -1,34 +1,39 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
+import Images from "@/constants/Images";
 import Shadows from "@/constants/Shadows";
 
-const PopularServiceItem = ({ item }) => {
+type PopularServiceItemProps = {
+  item: any;
+};
+
+const PopularServiceItem = ({ item }: PopularServiceItemProps) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => {}}>
       <TouchableOpacity style={styles.logoContainer}>
         <Image
           source={{
-            uri: "https://assets.petco.com/petco/image/upload/f_auto,q_auto:best/vet-services-vetco-total-care-lifestyle-img-800x577",
+            uri: item.image || Images.petPlaceholder,
           }}
-          resizeMode='contain'
+          resizeMode='cover'
           style={styles.logoImage}
         />
       </TouchableOpacity>
       <Text style={styles.brandName} numberOfLines={1}>
-        {item.name}
+        {item.brand.brand_name}
       </Text>
 
       <View style={styles.infoContainer}>
         <Text style={styles.serviceName} numberOfLines={1}>
-          Thu y
+          {item.service_name}
         </Text>
         <View style={styles.infoWrapper}>
           {/* <Text style={styles.publisher(selectedJob, item)}>
             {item?.job_publisher} -
           </Text> */}
-          <Text style={styles.location}> {item.location}</Text>
+          <Text style={styles.location}> {item.category.category_name}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -40,8 +45,7 @@ export default PopularServiceItem;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#FFF",
-    paddingHorizontal: Sizes.medium,
-    paddingBottom: Sizes.medium,
+    padding: Sizes.xLarge,
     borderRadius: Sizes.medium,
     justifyContent: "space-between",
     ...Shadows.medium,
@@ -56,13 +60,15 @@ const styles = StyleSheet.create({
   logoImage: {
     width: "100%",
     height: "100%",
+    borderRadius: Sizes.medium,
   },
   brandName: {
-    fontSize: Sizes.xSmall,
+    marginTop: Sizes.xSmall,
+    fontSize: Sizes.small,
     color: "#B3AEC6",
   },
   infoContainer: {
-    marginTop: Sizes.small,
+    marginTop: Sizes.xSmall,
   },
   serviceName: {
     fontSize: Sizes.large,

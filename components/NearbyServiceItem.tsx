@@ -1,11 +1,17 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import Shadows from "@/constants/Shadows";
+import { Link, useSegments } from "expo-router";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
-import { Link, useSegments } from "expo-router";
+import Images from "@/constants/Images";
+import Shadows from "@/constants/Shadows";
 
-const NearbyServiceItem = ({ item }) => {
+type NearbyServiceItemProps = {
+  item: any;
+};
+
+const NearbyServiceItem = ({ item }: NearbyServiceItemProps) => {
   const segement = useSegments();
 
   return (
@@ -14,19 +20,19 @@ const NearbyServiceItem = ({ item }) => {
         <View style={styles.logoContainer}>
           <Image
             source={{
-              uri: "https://veterinary.rossu.edu/sites/g/files/krcnkv416/files/styles/atge_default_md/public/2021-08/blog-veterinary-vet-school-requirements-to-know_herom.jpg?itok=ppqCvyru",
+              uri: item.image || Images.petPlaceholder,
             }}
-            resizeMode='contain'
+            resizeMode='cover'
             style={styles.logoImage}
           />
         </View>
 
         <View style={styles.textContainer}>
           <Text style={styles.serviceName} numberOfLines={1}>
-            {item.name}
+            {item.service_name}
           </Text>
 
-          <Text>haha</Text>
+          <Text>{item.brand.brand_name}</Text>
         </View>
       </TouchableOpacity>
     </Link>
@@ -46,6 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     ...Shadows.medium,
     shadowColor: Colors.light.white,
+    marginVertical: Sizes.xSmall,
   },
   logoContainer: {
     width: 100,
@@ -58,6 +65,7 @@ const styles = StyleSheet.create({
   logoImage: {
     width: "100%",
     height: "100%",
+    borderRadius: Sizes.medium,
   },
   textContainer: {
     flex: 1,
