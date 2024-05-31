@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Stack } from "expo-router";
+import { useEffect, useState } from "react";
+import { Stack, useLocalSearchParams } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
-import { useQueries } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Picker } from "@react-native-picker/picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -14,18 +14,21 @@ import {
   View,
 } from "react-native";
 
+import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import Images from "@/constants/Images";
 import Button from "@/components/ui/Button";
-import { getPetBreeds } from "@/apis/petBreed";
-import { getPetTypes } from "@/apis/petType";
-import { uploadImage } from "@/apis/upload";
 import { FontAwesome } from "@expo/vector-icons";
 import { formatDate } from "@/utils/dateFormat";
-import Sizes from "@/constants/Sizes";
+import { usePetType } from "@/providers/PetTypeProvider";
+import { getPetBreedsWithType } from "@/apis/petBreed";
+import Loader from "@/components/Loader";
+import { createUserPets } from "@/apis/pet";
 
 const AddPetScreen = () => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState<boolean>(false);
+  const [petTypeId, setPetTypeId] = useState<string | null>(null);
+  const [image, setImage] = useState({});
   const [form, setForm] = useState({
     pet_name: "",
     pet_dob: new Date(),
@@ -33,21 +36,32 @@ const AddPetScreen = () => {
     height: "",
     image: "",
     pet_breed_id: "",
-    pet_type_id: "",
   });
 
-  const results = useQueries({
-    queries: [
-      { queryKey: ["petTypes"], queryFn: getPetTypes },
-      { queryKey: ["petBreeds"], queryFn: getPetBreeds },
-    ],
+  const { id: idString } = useLocalSearchParams();
+  const isUpdating = !!idString;
+
+  const { getId } = usePetType();
+
+  useEffect(() => {
+    const fetchIdPet = async () => {
+      const id = await getId();
+      setPetTypeId(id);
+    };
+    fetchIdPet();
+  }, []);
+
+  const { data: petBreed, isLoading } = useQuery({
+    queryKey: ["petBreedsWType", petTypeId],
+    queryFn: () => getPetBreedsWithType(petTypeId),
+    enabled: !!petTypeId,
   });
 
-  const petTypesData = results[0]?.data;
-  const petBreedsData = results[1]?.data;
+  if (isLoading) {
+    return <Loader isLoading />;
+  }
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -56,13 +70,8 @@ const AddPetScreen = () => {
     });
 
     if (!result.canceled) {
-      const file = result.assets[0];
-
-      const imageFile = await uploadImage(file);
-
-      // console.log(imageFile);
-
-      // setImage(result.assets[0].uri);
+      setImage(result.assets[0]);
+      setForm({ ...form, image: result.assets[0].uri });
     }
   };
 
@@ -84,7 +93,45 @@ const AddPetScreen = () => {
     setShow(true);
   };
 
-  const onCreate = () => {};
+  const validateInput = () => {
+    if (
+      form.pet_name === "" ||
+      form.height === "" ||
+      form.weight === "" ||
+      form.pet_breed_id === "" ||
+      !form.image
+    ) {
+      alert("Please provide all fields");
+      return false;
+    }
+    return true;
+  };
+
+  const onSubmit = () => {
+    if (isUpdating) {
+      onUpdate();
+    } else {
+      onCreate();
+    }
+  };
+
+  const onCreate = async () => {
+    if (!validateInput()) {
+      return;
+    }
+    if (petTypeId === null) {
+      console.log("petTypeId is null");
+      return;
+    }
+
+    try {
+      await createUserPets(form, petTypeId, image);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onUpdate = async () => {};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -113,6 +160,7 @@ const AddPetScreen = () => {
           onChangeText={(e) => setForm({ ...form, weight: e })}
           placeholder='Cân nặng(đơn vị kg)'
           style={styles.input}
+          keyboardType='numeric'
         />
 
         <TextInput
@@ -120,6 +168,7 @@ const AddPetScreen = () => {
           onChangeText={(e) => setForm({ ...form, height: e })}
           placeholder='Chiều cao(đơn vị cm)'
           style={styles.input}
+          keyboardType='numeric'
         />
 
         <View
@@ -149,24 +198,13 @@ const AddPetScreen = () => {
 
         <Picker
           style={styles.input}
-          selectedValue={form.pet_type_id}
-          onValueChange={(itemValue) =>
-            setForm({ ...form, pet_type_id: itemValue })
-          }
-        >
-          {petTypesData?.map((type: any) => (
-            <Picker.Item key={type.id} label={type.type_name} value={type.id} />
-          ))}
-        </Picker>
-
-        <Picker
-          style={styles.input}
           selectedValue={form.pet_breed_id}
           onValueChange={(itemValue) =>
             setForm({ ...form, pet_breed_id: itemValue })
           }
         >
-          {petBreedsData?.map((breed: any) => (
+          <Picker.Item label='Xin hãy chọn giống thú cưng của bạn' value={""} />
+          {petBreed?.map((breed: any) => (
             <Picker.Item
               key={breed.id}
               label={breed.breed_name}
@@ -175,7 +213,10 @@ const AddPetScreen = () => {
           ))}
         </Picker>
 
-        <Button onPress={onCreate} text='Thêm mới' />
+        <Button
+          onPress={onSubmit}
+          text={isUpdating ? "Chỉnh sửa" : "Thêm mới"}
+        />
       </ScrollView>
     </SafeAreaView>
   );

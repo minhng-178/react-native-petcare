@@ -1,7 +1,8 @@
 import spa from "../assets/images/spa.png";
 import vet from "../assets/images/vet.png";
 import grooming from "../assets/images/grooming.png";
-
+import dog from "../assets/images/dog.png";
+import cat from "../assets/images/cat.png";
 const profile =
   "http://res.cloudinary.com/didw3mt8i/image/upload/v1716952555/tljhr4x60w7ct7enzmyg.jpg";
 
@@ -13,5 +14,7 @@ export default {
   grooming,
   vet,
   profile,
+  dog,
+  cat,
   petPlaceholder,
 };

@@ -28,7 +28,7 @@ export default function PetScreen() {
       <Button
         style={styles.button}
         text='Thêm mới thú cưng'
-        onPress={() => router.push("pets/create")}
+        onPress={() => router.push("pets/select")}
       />
     </View>
   );

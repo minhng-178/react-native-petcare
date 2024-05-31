@@ -51,7 +51,7 @@ const Headers = () => {
           renderItem={({ item }) => (
             <TouchableOpacity
               onPress={() => handleCategoryPress(item.name)}
-              activeOpacity={0.9} // Adjust the opacity as needed
+              activeOpacity={0.9}
               style={[
                 styles.tab,
                 {
