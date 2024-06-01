@@ -1,3 +1,4 @@
+import Colors from "@/constants/Colors";
 import { useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
@@ -46,11 +47,11 @@ LocaleConfig.locales["vi"] = {
 
 LocaleConfig.defaultLocale = "vi";
 
-const CalendarVN = ({ onDateSelect }) => {
+const CalendarVN = ({ onDateSelect }: any) => {
   const [selectedDate, setSelectedDate] = useState("");
 
-  const handleDateSelect = (date) => {
-    setSelectedDate(date);
+  const handleDateSelect = (date: any) => {
+    setSelectedDate(date.dateString);
     onDateSelect(date);
   };
 
@@ -58,7 +59,11 @@ const CalendarVN = ({ onDateSelect }) => {
     <Calendar
       onDayPress={handleDateSelect}
       markedDates={{
-        [selectedDate]: { selected: true, selectedColor: "blue" },
+        [selectedDate]: {
+          selected: true,
+          disableTouchEvent: true,
+          selectedColor: Colors.light.primary,
+        },
       }}
     />
   );

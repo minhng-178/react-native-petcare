@@ -19,11 +19,13 @@ export const brandPath = "brand?page=1&limit=10";
 export const petTypePath = "pet-type?page=1&limit=10";
 //? pet
 export const userPetPath = "pet/me/pets?page=1&limit=10";
-export const userCreatePetPath = "/pet/mobile";
+export const userCreatePetPath = "pet/mobile";
 
 //? servive
 export const servivePath = "service?page=1&limit=100";
-
+export const serviceIdPath = (id: string) => {
+  return `service/${id}`;
+};
 //? pet-booking
 
 //? upload

@@ -1,3 +1,4 @@
+import { Pet } from "@/types";
 import axiosInstance from "./axiosInstance";
 import { userCreatePetPath, userPetPath } from "./endpoint";
 import instance from "./axiosInstance";

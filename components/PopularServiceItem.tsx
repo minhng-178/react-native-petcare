@@ -1,5 +1,6 @@
-import React from "react";
+import { Link, useSegments } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import Images from "@/constants/Images";
@@ -10,33 +11,37 @@ type PopularServiceItemProps = {
 };
 
 const PopularServiceItem = ({ item }: PopularServiceItemProps) => {
-  return (
-    <TouchableOpacity style={styles.container} onPress={() => {}}>
-      <TouchableOpacity style={styles.logoContainer}>
-        <Image
-          source={{
-            uri: item.image || Images.petPlaceholder,
-          }}
-          resizeMode='cover'
-          style={styles.logoImage}
-        />
-      </TouchableOpacity>
-      <Text style={styles.brandName} numberOfLines={1}>
-        {item.brand.brand_name}
-      </Text>
+  const segement = useSegments();
 
-      <View style={styles.infoContainer}>
-        <Text style={styles.serviceName} numberOfLines={1}>
-          {item.service_name}
-        </Text>
-        <View style={styles.infoWrapper}>
-          {/* <Text style={styles.publisher(selectedJob, item)}>
-            {item?.job_publisher} -
-          </Text> */}
-          <Text style={styles.location}> {item.category.category_name}</Text>
+  return (
+    <Link href={`/${segement[0]}/home/${item.id}`} asChild>
+      <TouchableOpacity style={styles.container}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={{
+              uri: item.image || Images.petPlaceholder,
+            }}
+            resizeMode='cover'
+            style={styles.logoImage}
+          />
         </View>
-      </View>
-    </TouchableOpacity>
+        <Text style={styles.brandName} numberOfLines={1}>
+          {item.brand.brand_name}
+        </Text>
+
+        <View style={styles.infoContainer}>
+          <Text style={styles.serviceName} numberOfLines={1}>
+            {item.service_name}
+          </Text>
+          <View style={styles.infoWrapper}>
+            {/* <Text style={styles.publisher(selectedJob, item)}>
+              {item?.job_publisher} -
+            </Text> */}
+            <Text style={styles.location}> {item.category.category_name}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Link>
   );
 };
 

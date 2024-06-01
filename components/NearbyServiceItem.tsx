@@ -15,8 +15,8 @@ const NearbyServiceItem = ({ item }: NearbyServiceItemProps) => {
   const segement = useSegments();
 
   return (
-    <Link href={`/${segement[0]}/home/${item.id}}`} asChild>
-      <TouchableOpacity style={styles.container} onPress={() => {}}>
+    <Link href={`/${segement[0]}/home/${item.id}`} asChild>
+      <TouchableOpacity style={styles.container}>
         <View style={styles.logoContainer}>
           <Image
             source={{
@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     ...Shadows.medium,
     shadowColor: Colors.light.white,
-    marginVertical: Sizes.xSmall,
   },
   logoContainer: {
     width: 100,

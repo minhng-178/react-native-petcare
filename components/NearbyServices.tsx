@@ -12,25 +12,32 @@ import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import { getServices } from "@/apis/service";
 import NearbyServiceItem from "./NearbyServiceItem";
-
-const data = [
-  {
-    id: 1,
-    name: "Haircut",
-    rating: 4.5,
-    location: "uchiha madara",
-    image: "",
-  },
-];
+import { useIsFocused } from "@react-navigation/native";
+import { useEffect, useRef } from "react";
 
 const NearbyServices = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["service"],
+  const { data, isLoading, refetch, isFetching } = useQuery({
+    queryKey: ["servicesNearby"],
     queryFn: getServices,
+    staleTime: 0,
   });
+
+  const isFocus = useIsFocused();
+  const prevIsFocus = useRef(isFocus);
+
+  useEffect(() => {
+    if (!prevIsFocus.current && isFocus) {
+      refetch();
+    }
+    prevIsFocus.current = isFocus;
+  }, [isFocus]);
 
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
+  }
+
+  if (isFetching) {
+    return <Loader isLoading={isFetching} />;
   }
 
   return (

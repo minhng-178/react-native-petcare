@@ -1,5 +1,5 @@
+import { StyleSheet, View } from "react-native";
 import { ScrollView } from "react-native-virtualized-view";
-import { Image, StyleSheet, Text, View } from "react-native";
 
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";

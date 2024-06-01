@@ -104,7 +104,7 @@ const Headers = () => {
           data={data}
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={[styles.tab, { borderColor: Colors.light.white }]}
+              style={[styles.tab, { borderColor: Colors.light.lightWhite }]}
             >
               <View>
                 <Image
