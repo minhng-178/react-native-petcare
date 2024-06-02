@@ -20,6 +20,9 @@ export const petTypePath = "pet-type?page=1&limit=10";
 //? pet
 export const userPetPath = "pet/me/pets?page=1&limit=10";
 export const userCreatePetPath = "pet/mobile";
+export const petPath = (id: string) => {
+  return `pet/${id}`;
+};
 
 //? servive
 export const servivePath = "service?page=1&limit=100";

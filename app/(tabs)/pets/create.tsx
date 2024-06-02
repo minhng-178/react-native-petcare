@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, router, useLocalSearchParams } from "expo-router";
 import * as ImagePicker from "expo-image-picker";
 import { useQuery } from "@tanstack/react-query";
 import { Picker } from "@react-native-picker/picker";
@@ -18,17 +18,20 @@ import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import Images from "@/constants/Images";
 import Button from "@/components/ui/Button";
+import Toast from "react-native-toast-message";
 import { FontAwesome } from "@expo/vector-icons";
+
+import Loader from "@/components/Loader";
 import { formatDate } from "@/utils/dateFormat";
 import { usePetType } from "@/providers/PetTypeProvider";
 import { getPetBreedsWithType } from "@/apis/petBreed";
-import Loader from "@/components/Loader";
-import { createUserPets } from "@/apis/pet";
+import { createUserPets, getPet, updateUserPets } from "@/apis/pet";
 
 const AddPetScreen = () => {
   const [show, setShow] = useState<boolean>(false);
   const [petTypeId, setPetTypeId] = useState<string | null>(null);
   const [image, setImage] = useState({});
+  const [submiting, setSubmiting] = useState<boolean>(false);
   const [form, setForm] = useState({
     pet_name: "",
     pet_dob: new Date(),
@@ -37,9 +40,6 @@ const AddPetScreen = () => {
     image: "",
     pet_breed_id: "",
   });
-
-  const { id: idString } = useLocalSearchParams();
-  const isUpdating = !!idString;
 
   const { getId } = usePetType();
 
@@ -51,14 +51,45 @@ const AddPetScreen = () => {
     fetchIdPet();
   }, []);
 
-  const { data: petBreed, isLoading } = useQuery({
+  const { data: petBreed } = useQuery({
     queryKey: ["petBreedsWType", petTypeId],
     queryFn: () => getPetBreedsWithType(petTypeId),
     enabled: !!petTypeId,
   });
 
-  if (isLoading) {
-    return <Loader isLoading />;
+  const { id } = useLocalSearchParams();
+  const isUpdating = !!id;
+  let updatingPet = {} as any;
+
+  if (isUpdating) {
+    const { data, isLoading } = useQuery({
+      queryKey: ["pet", id],
+      queryFn: () => {
+        if (typeof id === "string") {
+          return getPet(id);
+        }
+      },
+    });
+
+    if (isLoading) {
+      return <Loader isLoading />;
+    }
+
+    updatingPet = data ? data : {};
+
+    useEffect(() => {
+      setForm({
+        ...form,
+        pet_name: updatingPet.pet_name,
+        pet_breed_id: updatingPet.pet_breed_id,
+        pet_dob: new Date(updatingPet.pet_dob),
+        weight: updatingPet.weight.toString(),
+        height: updatingPet.height.toString(),
+        image: updatingPet.image,
+      });
+      setPetTypeId(updatingPet.pet_type_id);
+      setImage(updatingPet.image);
+    }, [updatingPet]);
   }
 
   const pickImage = async () => {
@@ -81,9 +112,10 @@ const AddPetScreen = () => {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
 
-    if (currentDate > now) {
+    if (currentDate >= now) {
       alert("Ngày sinh không thể ở tương lai hoặc ngày hôm nay.");
       setShow(false);
+      return;
     } else {
       setShow(false);
       setForm({ ...form, pet_dob: currentDate });
@@ -96,13 +128,16 @@ const AddPetScreen = () => {
 
   const validateInput = () => {
     if (
-      form.pet_name === "" ||
-      form.height === "" ||
-      form.weight === "" ||
-      form.pet_breed_id === "" ||
+      !form.pet_name ||
+      !form.height ||
+      !form.weight ||
+      !form.pet_breed_id ||
       !form.image
     ) {
-      alert("Please provide all fields");
+      alert("Xin hãy nhập tất cả các trường");
+      return false;
+    } else if (parseFloat(form.height) === 0 || parseFloat(form.weight) === 0) {
+      alert("Cân nặng hoặc chiều cao phải lớn hơn 0");
       return false;
     }
     return true;
@@ -116,6 +151,19 @@ const AddPetScreen = () => {
     }
   };
 
+  const resetFields = () => {
+    setForm({
+      pet_name: "",
+      pet_dob: new Date(),
+      weight: "",
+      height: "",
+      image: "",
+      pet_breed_id: "",
+    });
+    setPetTypeId(null);
+    setImage({});
+  };
+
   const onCreate = async () => {
     if (!validateInput()) {
       return;
@@ -124,20 +172,54 @@ const AddPetScreen = () => {
       console.log("petTypeId is null");
       return;
     }
-
+    setSubmiting(true);
     try {
-      await createUserPets(form, petTypeId, image);
+      const pet = await createUserPets(form, petTypeId, image);
+      if (pet) {
+        Toast.show({ text1: "Thêm mới thú cưng thành công" });
+        resetFields();
+        router.push("/pets");
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setSubmiting(false);
     }
   };
 
-  const onUpdate = async () => {};
+  const onUpdate = async () => {
+    if (!validateInput()) {
+      return;
+    }
+    if (petTypeId === null) {
+      console.log("petTypeId is null");
+      return;
+    }
+    setSubmiting(true);
+    try {
+      if (typeof id === "string") {
+        const pet = await updateUserPets(id, form, petTypeId, image);
+        if (pet) {
+          Toast.show({ text1: "Chỉnh sửa thú cưng thành công" });
+          resetFields();
+          router.back();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmiting(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Stack.Screen options={{ title: "Thêm thú cưng" }} />
+        <Stack.Screen
+          options={{
+            title: isUpdating ? "Chỉnh sửa thú cưng" : "Thêm thú cưng",
+          }}
+        />
 
         <Image
           source={{
@@ -215,8 +297,9 @@ const AddPetScreen = () => {
         </Picker>
 
         <Button
+          disabled={submiting}
           onPress={onSubmit}
-          text={isUpdating ? "Chỉnh sửa" : "Thêm mới"}
+          text={submiting ? "Đang gửi..." : "Gửi"}
         />
       </ScrollView>
     </SafeAreaView>

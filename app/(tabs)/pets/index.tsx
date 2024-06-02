@@ -7,15 +7,31 @@ import { getUserPets } from "@/apis/pet";
 import Button from "@/components/ui/Button";
 import PetListItem from "@/components/PetListItem";
 import Loader from "@/components/Loader";
+import { useIsFocused } from "@react-navigation/native";
+import { useEffect, useRef } from "react";
 
 export default function PetScreen() {
-  const { data, isLoading } = useQuery({
-    queryKey: ["pets"],
+  const { data, isLoading, refetch, isRefetching } = useQuery({
+    queryKey: ["userPets"],
     queryFn: getUserPets,
   });
 
+  const isFocus = useIsFocused();
+  const prevIsFocus = useRef(isFocus);
+
+  useEffect(() => {
+    if (!prevIsFocus.current && isFocus) {
+      refetch();
+    }
+    prevIsFocus.current = isFocus;
+  }, [isFocus]);
+
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
+  }
+
+  if (isRefetching) {
+    return <Loader isLoading={isRefetching} />;
   }
 
   return (

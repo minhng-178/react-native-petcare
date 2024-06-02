@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useSegments } from "expo-router";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -52,6 +51,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF",
     ...Shadows.medium,
     shadowColor: Colors.light.white,
+    marginBottom: Sizes.medium,
   },
   logoContainer: {
     width: 100,

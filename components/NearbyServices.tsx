@@ -16,7 +16,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useRef } from "react";
 
 const NearbyServices = () => {
-  const { data, isLoading, refetch, isFetching } = useQuery({
+  const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ["servicesNearby"],
     queryFn: getServices,
     staleTime: 0,
@@ -36,8 +36,8 @@ const NearbyServices = () => {
     return <Loader isLoading={isLoading} />;
   }
 
-  if (isFetching) {
-    return <Loader isLoading={isFetching} />;
+  if (isRefetching) {
+    return <Loader isLoading={isRefetching} />;
   }
 
   return (

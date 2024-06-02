@@ -1,7 +1,7 @@
 export interface Pet {
   id: string;
   pet_name: string;
-  pet_dob: Date;
+  pet_dob: string;
   height: string;
   weight: string;
   pet_type_id: string;

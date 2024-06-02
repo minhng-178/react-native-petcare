@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import Colors from "../constants/Colors";
 import Images from "@/constants/Images";
 import { Pet } from "@/types";
+import Sizes from "@/constants/Sizes";
 
 function calculateAge(dob: string) {
   const dobDate = new Date(dob);
@@ -34,14 +35,16 @@ const PetListItem = ({ pets }: PetListProps) => {
         <Image
           source={{ uri: pets?.image || Images.petPlaceholder }}
           style={styles.image}
-          resizeMode='contain'
+          resizeMode='cover'
         />
         <View style={styles.infoContainer}>
           <View style={styles.textContainer}>
             <Text style={styles.title} numberOfLines={1}>
               {pets?.pet_name}
             </Text>
-            <Text style={styles.price}>Age:</Text>
+            <Text style={styles.price}>
+              Tuổi: {calculateAge(pets?.pet_dob)}
+            </Text>
           </View>
         </View>
       </Pressable>
@@ -59,9 +62,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 80,
+    height: 80,
     marginRight: 10,
+    borderRadius: Sizes.medium,
   },
   infoContainer: {
     flex: 1,

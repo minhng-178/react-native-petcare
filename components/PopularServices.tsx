@@ -15,7 +15,7 @@ import PopularServiceItem from "./PopularServiceItem";
 import { useIsFocused } from "@react-navigation/native";
 import { useEffect, useRef } from "react";
 const PopularServices = () => {
-  const { data, isLoading, refetch, isFetching } = useQuery({
+  const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ["servicesPopular"],
     queryFn: getServices,
     staleTime: 0,
@@ -35,10 +35,9 @@ const PopularServices = () => {
     return <Loader isLoading={isLoading} />;
   }
 
-  if (isFetching) {
-    return <Loader isLoading={isFetching} />;
+  if (isRefetching) {
+    return <Loader isLoading={isRefetching} />;
   }
-
   return (
     <View>
       <View style={styles.header}>

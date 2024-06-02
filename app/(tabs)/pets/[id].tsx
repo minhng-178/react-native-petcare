@@ -1,23 +1,83 @@
-import React from "react";
-import { Stack, useLocalSearchParams } from "expo-router";
-import { Image, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
 import { FontAwesome } from "@expo/vector-icons";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Link, Stack, router, useLocalSearchParams } from "expo-router";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
-import Button from "@/components/ui/Button";
+import Loader from "@/components/Loader";
 import Shadows from "@/constants/Shadows";
+import Button from "@/components/ui/Button";
+import { deletePet, getPet } from "@/apis/pet";
+import { calculateAge } from "@/utils/dateFormat";
+import { useIsFocused } from "@react-navigation/native";
+import { useEffect, useRef } from "react";
 
 const PetDetailsScreen = () => {
   const { id } = useLocalSearchParams();
+  const { data, isLoading, refetch, isRefetching } = useQuery({
+    queryKey: ["pet", id],
+    queryFn: () => {
+      if (typeof id === "string") {
+        return getPet(id);
+      }
+    },
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["deletePet"],
+    mutationFn: (id: string) => deletePet(id),
+    onSuccess: () => {
+      router.push("/pets");
+      Toast.show({ text1: "Xoá thành công" });
+    },
+  });
+
+  const isFocus = useIsFocused();
+  const prevIsFocus = useRef(isFocus);
+
+  useEffect(() => {
+    if (!prevIsFocus.current && isFocus) {
+      refetch();
+    }
+    prevIsFocus.current = isFocus;
+  }, [isFocus]);
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
+  }
+
+  if (isRefetching) {
+    return <Loader isLoading={isRefetching} />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Stack.Screen options={{ title: `Pet #${id}` }} />
+      <Stack.Screen
+        options={{
+          title: `${data.pet_name}`,
+          headerRight: () => (
+            <Link href={`/pets/create?id=${id}`} asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name='pencil'
+                    size={25}
+                    color={Colors.light.primary}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
+        }}
+      />
 
       <Image
         style={styles.profileImage}
-        source={{ uri: "https://placehold.co/600x400/png" }}
+        source={{ uri: data.image || "https://placehold.co/600x400/png" }}
       />
       <View
         style={[
@@ -29,7 +89,7 @@ const PetDetailsScreen = () => {
           },
         ]}
       >
-        <Text style={styles.name}>Tên thú cưng</Text>
+        <Text style={styles.name}>{data.pet_name}</Text>
         <Text style={styles.breed}>Chó</Text>
       </View>
 
@@ -45,15 +105,17 @@ const PetDetailsScreen = () => {
       <View style={[styles.rowContainer, { justifyContent: "space-between" }]}>
         <View style={styles.card}>
           <Text style={styles.textSubTitle}>Tuổi</Text>
-          <Text style={styles.textSubContent}>3</Text>
+          <Text style={styles.textSubContent}>
+            {calculateAge(data?.pet_dob)}
+          </Text>
         </View>
         <View style={styles.card}>
           <Text style={styles.textSubTitle}>Cân nặng</Text>
-          <Text style={styles.textSubContent}>12kg</Text>
+          <Text style={styles.textSubContent}>{data.weight}kg</Text>
         </View>
         <View style={styles.card}>
           <Text style={styles.textSubTitle}>Chiều cao</Text>
-          <Text style={styles.textSubContent}>65cm</Text>
+          <Text style={styles.textSubContent}>{data.height}cm</Text>
         </View>
         <View style={styles.card}>
           <Text style={styles.textSubTitle}>Giống</Text>
@@ -76,6 +138,18 @@ const PetDetailsScreen = () => {
         </Text>
         <Button text='Xem thêm' onPress={() => {}} />
       </View>
+
+      <Button
+        text={isPending ? "Đang xóa..." : "Xoá"}
+        style={{
+          marginTop: "auto",
+        }}
+        onPress={() => {
+          if (typeof id === "string") {
+            return mutate(id);
+          }
+        }}
+      />
     </SafeAreaView>
   );
 };
