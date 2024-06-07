@@ -1,6 +1,11 @@
 import { Alert } from "react-native";
 import axiosInstance from "./axiosInstance";
-import { loginPath, registerPath } from "./endpoint";
+import {
+  loginGooglePath,
+  loginPath,
+  profilePath,
+  registerPath,
+} from "./endpoint";
 
 export const login = async (email: string, password: string) => {
   const data = {
@@ -15,10 +20,8 @@ export const login = async (email: string, password: string) => {
       Alert.alert("Error", "Email or Password is incorrect");
     }
 
-    if (response.status === 200) {
+    if (response.status === 201) {
       return response.data;
-    } else {
-      console.log(response);
     }
   } catch (error: any) {
     throw new Error(error.message);
@@ -44,11 +47,37 @@ export const register = async (
     }
 
     if (response.status === 201) {
-      return [response.data.user, response.data.tokens];
+      return response.data;
     } else {
       console.log(response.data.message);
     }
   } catch (error: any) {
     throw new Error(error.message);
+  }
+};
+
+export const loginWithGoogle = async (user: any) => {
+  const data = {
+    name: user.name,
+    email: user.email,
+    photoUrl: user.photo,
+  };
+
+  try {
+    const response = await axiosInstance.post(loginGooglePath, data);
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const getUserProfile = async () => {
+  try {
+    const response = await axiosInstance.get(profilePath);
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error);
   }
 };

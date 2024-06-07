@@ -6,8 +6,14 @@ import Colors from "@/constants/Colors";
 import Button from "@/components/ui/Button";
 import { useAuth } from "@/providers/AuthProvider";
 import Images from "@/constants/Images";
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfile } from "@/apis/auth";
 
 export default function Profile() {
+  const { data } = useQuery({ queryKey: ["profile"], queryFn: getUserProfile });
+
+  console.log(data);
+
   const { logout, auth, user } = useAuth();
 
   const handleLogout = async () => {

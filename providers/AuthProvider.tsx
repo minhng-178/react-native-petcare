@@ -1,3 +1,4 @@
+import { loginWithGoogle } from "@/apis/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { router } from "expo-router";
@@ -54,7 +55,8 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     });
     try {
       const userInfo = await GoogleSignin.signIn();
-      updateAuth(userInfo.user);
+      const data = await loginWithGoogle(userInfo.user);
+      updateAuth(data.data.user);
     } catch (error) {
       console.log(error);
     }

@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import Loader from "./Loader";
 import Sizes from "@/constants/Sizes";
@@ -18,26 +18,25 @@ const PopularServices = () => {
   const { data, isLoading, refetch, isRefetching } = useQuery({
     queryKey: ["servicesPopular"],
     queryFn: getServices,
-    staleTime: 0,
   });
 
-  const isFocus = useIsFocused();
-  const prevIsFocus = useRef(isFocus);
+  // const isFocus = useIsFocused();
+  // const prevIsFocus = useRef(isFocus);
 
-  useEffect(() => {
-    if (!prevIsFocus.current && isFocus) {
-      refetch();
-    }
-    prevIsFocus.current = isFocus;
-  }, [isFocus]);
+  // useEffect(() => {
+  //   if (!prevIsFocus.current && isFocus) {
+  //     refetch();
+  //   }
+  //   prevIsFocus.current = isFocus;
+  // }, [isFocus]);
 
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
   }
 
-  if (isRefetching) {
-    return <Loader isLoading={isRefetching} />;
-  }
+  // if (isRefetching) {
+  //   return <Loader isLoading={isRefetching} />;
+  // }
   return (
     <View>
       <View style={styles.header}>

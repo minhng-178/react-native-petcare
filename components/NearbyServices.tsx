@@ -25,20 +25,20 @@ const NearbyServices = () => {
   const isFocus = useIsFocused();
   const prevIsFocus = useRef(isFocus);
 
-  useEffect(() => {
-    if (!prevIsFocus.current && isFocus) {
-      refetch();
-    }
-    prevIsFocus.current = isFocus;
-  }, [isFocus]);
+  // useEffect(() => {
+  //   if (!prevIsFocus.current && isFocus) {
+  //     refetch();
+  //   }
+  //   prevIsFocus.current = isFocus;
+  // }, [isFocus]);
 
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
   }
 
-  if (isRefetching) {
-    return <Loader isLoading={isRefetching} />;
-  }
+  // if (isRefetching) {
+  //   return <Loader isLoading={isRefetching} />;
+  // }
 
   return (
     <View style={styles.container}>

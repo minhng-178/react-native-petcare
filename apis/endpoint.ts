@@ -3,6 +3,8 @@ export const baseURL = "https://fureverfriend.id.vn/api/v1";
 //? auth
 export const loginPath = "/auth/login";
 export const registerPath = "/auth/regiser";
+export const profilePath = "/auth/profile";
+export const loginGooglePath = "/auth/login-google-mobile";
 export const refreshTokenPath = "/auth/reset";
 
 //? user
