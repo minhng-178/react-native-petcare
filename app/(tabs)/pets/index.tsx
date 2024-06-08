@@ -1,37 +1,38 @@
 import { router } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+
+import { getUserPets } from "@/apis/pet";
 
 import Colors from "@/constants/Colors";
-import { getUserPets } from "@/apis/pet";
+import Loader from "@/components/Loader";
 import Button from "@/components/ui/Button";
 import PetListItem from "@/components/PetListItem";
-import Loader from "@/components/Loader";
-import { useIsFocused } from "@react-navigation/native";
-import { useEffect, useRef } from "react";
 
 export default function PetScreen() {
-  const { data, isLoading, refetch, isRefetching } = useQuery({
+  const { data, isLoading, error, isError } = useQuery({
     queryKey: ["userPets"],
     queryFn: getUserPets,
   });
 
-  const isFocus = useIsFocused();
-  const prevIsFocus = useRef(isFocus);
+  if (isError) {
+    return (
+      <View>
+        <Text>Error: {error.message}</Text>
+      </View>
+    );
+  }
 
-  useEffect(() => {
-    if (!prevIsFocus.current && isFocus) {
-      refetch();
-    }
-    prevIsFocus.current = isFocus;
-  }, [isFocus]);
+  if (!data) {
+    return (
+      <View>
+        <Text>No data available</Text>
+      </View>
+    );
+  }
 
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
-  }
-
-  if (isRefetching) {
-    return <Loader isLoading={isRefetching} />;
   }
 
   return (

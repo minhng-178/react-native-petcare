@@ -23,7 +23,7 @@ export default function AppointmentStack() {
         ),
       }}
     >
-      <Stack.Screen name='index' options={{ title: "Lịch hẹn" }} />
+      <Stack.Screen name='list' options={{ headerShown: false }} />
     </Stack>
   );
 }

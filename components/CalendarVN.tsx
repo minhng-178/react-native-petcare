@@ -1,4 +1,5 @@
 import Colors from "@/constants/Colors";
+import { format } from "date-fns";
 import { useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { LocaleConfig } from "react-native-calendars";
@@ -54,9 +55,14 @@ const CalendarVN = ({ onDateSelect }: any) => {
     setSelectedDate(date.dateString);
     onDateSelect(date);
   };
+  const tomorrow = format(
+    new Date().setDate(new Date().getDate() + 1),
+    "yyyy-MM-dd"
+  );
 
   return (
     <Calendar
+      minDate={tomorrow}
       onDayPress={handleDateSelect}
       markedDates={{
         [selectedDate]: {

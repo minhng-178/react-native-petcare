@@ -4,12 +4,13 @@ import { petPath, userCreatePetPath, userPetPath } from "./endpoint";
 export const getUserPets = async () => {
   try {
     const response = await axiosInstance.get(userPetPath);
+
     if (response.status === 200) {
       return response.data.data;
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log("API Error:", error);
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -19,9 +20,9 @@ export const getPet = async (id: string) => {
     if (response.status === 200) {
       return response.data.data;
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log("API Error:", error);
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -31,9 +32,9 @@ export const deletePet = async (id: string) => {
     if (response.status === 200) {
       return response.data.data;
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log("API Error:", error);
-    throw error;
+    throw new Error(error);
   }
 };
 
@@ -53,8 +54,9 @@ export const createUserPets = async (
     } else if (response.status === 413) {
       throw new Error("File is too large");
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log("API Error:", error);
+    throw new Error(error);
   }
 };
 
@@ -76,7 +78,8 @@ export const updateUserPets = async (
     } else if (response.status === 413) {
       throw new Error("File is too large");
     }
-  } catch (error) {
+  } catch (error: any) {
     console.log("API Error:", error);
+    throw new Error(error);
   }
 };

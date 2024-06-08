@@ -1,4 +1,5 @@
 import { loginWithGoogle } from "@/apis/auth";
+import { asyncStorage } from "@/utils/asyncStorage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { router } from "expo-router";
@@ -56,6 +57,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     try {
       const userInfo = await GoogleSignin.signIn();
       const data = await loginWithGoogle(userInfo.user);
+
       updateAuth(data.data.user);
     } catch (error) {
       console.log(error);
@@ -64,9 +66,10 @@ export default function AuthProvider({ children }: PropsWithChildren) {
 
   const logout = async () => {
     await AsyncStorage.removeItem("user");
+    await GoogleSignin.signOut();
+
     setUser(null);
     setIsAuth(false);
-    GoogleSignin.signOut();
     router.push("/");
     Toast.show({
       text1: "Đăng xuất thành công",

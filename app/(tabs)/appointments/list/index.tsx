@@ -1,10 +1,10 @@
 import Sizes from "@/constants/Sizes";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function AppointmentScreen() {
+export default function BookingScreen() {
   return (
     <View style={styles.container}>
-      <Text>Appointment Screen</Text>
+      <Text>Booking Screen</Text>
     </View>
   );
 }

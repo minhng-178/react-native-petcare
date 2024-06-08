@@ -6,6 +6,7 @@ import Toast from "react-native-toast-message";
 import AuthProvider from "@/providers/AuthProvider";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { PetTypeProvider } from "@/providers/PetTypeProvider";
+import PaymentUrlProvider from "@/providers/PaymentProvider";
 
 type ProvidersProps = {
   children: ReactNode;
@@ -19,7 +20,9 @@ const Providers: React.FC<ProvidersProps> = ({ children }) => {
       <ThemeProvider value={DefaultTheme}>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
-            <PetTypeProvider>{children}</PetTypeProvider>
+            <PaymentUrlProvider>
+              <PetTypeProvider>{children}</PetTypeProvider>
+            </PaymentUrlProvider>
           </AuthProvider>
         </QueryClientProvider>
       </ThemeProvider>

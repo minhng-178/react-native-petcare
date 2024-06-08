@@ -1,37 +1,39 @@
-import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet } from "react-native";
+import { Stack } from "expo-router";
+import { useQuery } from "@tanstack/react-query";
+import { FlatList, StyleSheet, View } from "react-native";
 
-import { Text, View } from "@/components/ui/Themed";
+import Sizes from "@/constants/Sizes";
+import Loader from "@/components/Loader";
+import { getNotifications } from "@/apis/notify";
+import { useAuth } from "@/providers/AuthProvider";
+import NotifyListItem from "@/components/NotifyListItem";
 
 export default function ModalScreen() {
+  const { user } = useAuth();
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["Notify"],
+    queryFn: () => getNotifications(user.user_id),
+  });
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Modal</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
+      <Stack.Screen options={{ title: "Thông báo" }} />
+      <FlatList
+        data={data}
+        renderItem={({ item }) => <NotifyListItem notifyItem={item} />}
+        contentContainerStyle={{ gap: 10 }}
       />
-
-      {/* Use a light status bar on iOS to account for the black space above the modal */}
-      <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+    padding: Sizes.small,
   },
 });

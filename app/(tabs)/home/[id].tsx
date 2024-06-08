@@ -1,14 +1,14 @@
+import { useQuery } from "@tanstack/react-query";
+import { ScrollView } from "react-native-virtualized-view";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 
 import Button from "@/components/ui/Button";
-import { useQuery } from "@tanstack/react-query";
 import { getService } from "@/apis/service";
 import Loader from "@/components/Loader";
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import Images from "@/constants/Images";
-import { ScrollView } from "react-native-virtualized-view";
 
 const ServiceDetailsScreen = () => {
   const { id } = useLocalSearchParams();
@@ -43,21 +43,28 @@ const ServiceDetailsScreen = () => {
             <Text>Giờ mở cửa:</Text>
             <View style={styles.times}>
               <View style={styles.timeCard}>
-                <Text style={styles.time}>{data.startTime}</Text>
+                <Text style={styles.time}>{data.starttime}</Text>
               </View>
               <Text style={{ fontSize: 20 }}> - </Text>
               <View style={styles.timeCard}>
-                <Text style={styles.time}>{data.endTime}</Text>
+                <Text style={styles.time}>{data.endtime}</Text>
               </View>
             </View>
           </View>
+          <Text style={styles.subtitle}>Nhãn hàng</Text>
+          <Text style={styles.description}>{data.brand.brand_name}</Text>
+          <Text style={styles.subtitle}>Danh mục</Text>
+          <Text style={styles.description}>{data.category.category_name}</Text>
+          <Text style={styles.subtitle}>Địa chỉ</Text>
+          <Text style={styles.description}>{data.location.location_name}</Text>
+          <Text style={styles.subtitle}>Mô tả</Text>
           <Text style={styles.description}>{data.service_description}</Text>
         </View>
       </ScrollView>
       <Button
         style={{ marginTop: "auto" }}
         text='Đặt lịch hẹn'
-        onPress={() => router.push("/home/create")}
+        onPress={() => router.push(`/home/create?id=${id}`)}
       />
     </View>
   );
@@ -85,6 +92,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: Sizes.small,
     color: Colors.light.primary,
+  },
+  subtitle: {
+    fontSize: Sizes.medium,
+    fontWeight: "bold",
+    marginBottom: Sizes.small,
   },
   description: {
     fontSize: Sizes.medium,

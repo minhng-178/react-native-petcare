@@ -6,6 +6,7 @@ import {
   profilePath,
   registerPath,
 } from "./endpoint";
+import { asyncStorage } from "@/utils/asyncStorage";
 
 export const login = async (email: string, password: string) => {
   const data = {
@@ -21,6 +22,8 @@ export const login = async (email: string, password: string) => {
     }
 
     if (response.status === 201) {
+      const tokens = response.data.data.accessToken;
+      await asyncStorage.setToken(tokens);
       return response.data;
     }
   } catch (error: any) {
@@ -65,7 +68,10 @@ export const loginWithGoogle = async (user: any) => {
 
   try {
     const response = await axiosInstance.post(loginGooglePath, data);
+    const tokens = response.data.data.accessToken;
+    console.log(tokens, "login google");
 
+    await asyncStorage.setToken(tokens);
     return response.data;
   } catch (error: any) {
     throw new Error(error);
@@ -76,7 +82,7 @@ export const getUserProfile = async () => {
   try {
     const response = await axiosInstance.get(profilePath);
 
-    return response.data;
+    return response.data.data;
   } catch (error: any) {
     throw new Error(error);
   }

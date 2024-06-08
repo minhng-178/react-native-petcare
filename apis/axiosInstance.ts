@@ -54,84 +54,83 @@ instance.interceptors.response.use(
       const tokens = response.data.data.accessToken;
 
       await asyncStorage.setToken(tokens);
-      // await asyncStorage.setRefreshToken(tokens.refresh.token);
     }
     return response;
   },
   async (error) => {
-    const originalRequest = error.config;
+    // const originalRequest = error.config;
 
-    if (
-      error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
-    ) {
-      if (isRefreshing) {
-        return new Promise(function (resolve, reject) {
-          failedQueue.push({ resolve, reject });
-        })
-          .then(function (token) {
-            originalRequest.headers["Authorization"] = "Bearer " + token;
-            return instance.request(originalRequest);
-          })
-          .catch(function (err) {
-            return Promise.reject(err);
-          });
-      }
-      originalRequest._retry = true;
-      isRefreshing = true;
+    // if (
+    //   error.response &&
+    //   error.response.status === 401 &&
+    //   !originalRequest._retry
+    // ) {
+    //   if (isRefreshing) {
+    //     return new Promise(function (resolve, reject) {
+    //       failedQueue.push({ resolve, reject });
+    //     })
+    //       .then(function (token) {
+    //         originalRequest.headers["Authorization"] = "Bearer " + token;
+    //         return instance.request(originalRequest);
+    //       })
+    //       .catch(function (err) {
+    //         return Promise.reject(err);
+    //       });
+    //   }
+    //   originalRequest._retry = true;
+    //   isRefreshing = true;
 
-      const refreshToken = await asyncStorage.getRefreshToken();
+    //   const refreshToken = await asyncStorage.getRefreshToken();
 
-      return new Promise(function (resolve, reject) {
-        console.log("post refresh token");
-        axios
-          .post(
-            baseURL + refreshTokenPath,
-            { refreshToken: refreshToken },
-            {
-              headers: defaultHeader,
-            }
-          )
-          .then(async function (res) {
-            const tokens = res.data.tokens;
+    //   return new Promise(function (resolve, reject) {
+    //     console.log("post refresh token");
+    //     axios
+    //       .post(
+    //         baseURL + refreshTokenPath,
+    //         { refreshToken: refreshToken },
+    //         {
+    //           headers: defaultHeader,
+    //         }
+    //       )
+    //       .then(async function (res) {
+    //         const tokens = res.data.tokens;
 
-            // 1) put token to LocalStorage
-            await asyncStorage.setToken(tokens.access.token);
-            if (tokens && tokens.refresh.token) {
-              await asyncStorage.setRefreshToken(tokens.refresh.token);
-            }
+    //         // 1) put token to LocalStorage
+    //         await asyncStorage.setToken(tokens.access.token);
+    //         if (tokens && tokens.refresh.token) {
+    //           await asyncStorage.setRefreshToken(tokens.refresh.token);
+    //         }
 
-            // 2) Change Authorization header
-            axios.defaults.headers.common["Authorization"] =
-              "Bearer " + tokens.accessToken;
-            originalRequest.headers["Authorization"] =
-              "Bearer " + tokens.accessToken;
+    //         // 2) Change Authorization header
+    //         axios.defaults.headers.common["Authorization"] =
+    //           "Bearer " + tokens.accessToken;
+    //         originalRequest.headers["Authorization"] =
+    //           "Bearer " + tokens.accessToken;
 
-            processQueue(null, tokens.access.token);
+    //         processQueue(null, tokens.access.token);
 
-            // 3) return originalRequest object with Axios
-            resolve(instance.request(originalRequest));
-          })
-          .catch(function (err) {
-            const status = err.response.status;
-            const data = err.response.data;
+    //         // 3) return originalRequest object with Axios
+    //         resolve(instance.request(originalRequest));
+    //       })
+    //       .catch(function (err) {
+    //         const status = err.response.status;
+    //         const data = err.response.data;
 
-            if (status === 404) {
-              clearAuthToken();
-            }
-            if (data && data.error.errorCode === "REFRESH_TOKEN_INVALID") {
-              clearAuthToken();
-            }
+    //         if (status === 404) {
+    //           clearAuthToken();
+    //         }
+    //         if (data && data.error.errorCode === "REFRESH_TOKEN_INVALID") {
+    //           clearAuthToken();
+    //         }
 
-            processQueue(err, null);
-            reject(err);
-          })
-          .finally(function () {
-            isRefreshing = false;
-          });
-      });
-    }
+    //         processQueue(err, null);
+    //         reject(err);
+    //       })
+    //       .finally(function () {
+    //         isRefreshing = false;
+    //       });
+    //   });
+    // }
     return Promise.reject(handleError(error));
   }
 );
