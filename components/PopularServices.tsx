@@ -12,31 +12,17 @@ import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import { getServices } from "@/apis/service";
 import PopularServiceItem from "./PopularServiceItem";
-import { useIsFocused } from "@react-navigation/native";
-import { useEffect, useRef } from "react";
+
 const PopularServices = () => {
-  const { data, isLoading, refetch, isRefetching } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["servicesPopular"],
     queryFn: getServices,
   });
-
-  // const isFocus = useIsFocused();
-  // const prevIsFocus = useRef(isFocus);
-
-  // useEffect(() => {
-  //   if (!prevIsFocus.current && isFocus) {
-  //     refetch();
-  //   }
-  //   prevIsFocus.current = isFocus;
-  // }, [isFocus]);
 
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
   }
 
-  // if (isRefetching) {
-  //   return <Loader isLoading={isRefetching} />;
-  // }
   return (
     <View>
       <View style={styles.header}>

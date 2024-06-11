@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Toast from "react-native-toast-message";
-import { StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { Stack, useLocalSearchParams } from "expo-router";
 
 import Colors from "@/constants/Colors";
@@ -26,7 +26,36 @@ const Review = () => {
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ title: "Review lịch hẹn" }} />
-      <Text>{id}</Text>
+      {/* <Image
+        source={{ uri: data.image || Images.petPlaceholder }}
+        style={styles.image}
+        resizeMode='contain'
+      />
+
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>{data.service_name}</Text>
+
+        <View style={styles.timesWrapper}>
+          <Text>Giờ mở cửa:</Text>
+          <View style={styles.times}>
+            <View style={styles.timeCard}>
+              <Text style={styles.time}>{data.starttime}</Text>
+            </View>
+            <Text style={{ fontSize: 20 }}> - </Text>
+            <View style={styles.timeCard}>
+              <Text style={styles.time}>{data.endtime}</Text>
+            </View>
+          </View>
+        </View>
+        <Text style={styles.subtitle}>Nhãn hàng</Text>
+        <Text style={styles.description}>{data.brand.brand_name}</Text>
+        <Text style={styles.subtitle}>Danh mục</Text>
+        <Text style={styles.description}>{data.category.category_name}</Text>
+        <Text style={styles.subtitle}>Địa chỉ</Text>
+        <Text style={styles.description}>{data.location.location_name}</Text>
+        <Text style={styles.subtitle}>Mô tả</Text>
+        <Text style={styles.description}>{data.service_description}</Text>
+      </View> */}
       <Button
         text={isLoading ? "Đang đặt..." : "Đặt ngay"}
         onPress={onSubmit}

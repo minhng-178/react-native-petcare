@@ -27,6 +27,7 @@ export default function ModalScreen() {
         data={data}
         renderItem={({ item }) => <NotifyListItem notifyItem={item} />}
         contentContainerStyle={{ gap: 10 }}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );

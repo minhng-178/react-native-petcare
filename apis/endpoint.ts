@@ -33,6 +33,7 @@ export const serviceIdPath = (id: string) => {
 };
 //? pet-booking
 export const bookingPath = "booking";
+export const bookingUserPath = "booking/me/bookings";
 
 //? pet-appointment
 export const appointmentPath = "appointment";

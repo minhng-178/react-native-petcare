@@ -59,6 +59,7 @@ const ServiceDetailsScreen = () => {
           <Text style={styles.description}>{data.location.location_name}</Text>
           <Text style={styles.subtitle}>Mô tả</Text>
           <Text style={styles.description}>{data.service_description}</Text>
+          <Text style={styles.price}>{data.price} VND</Text>
         </View>
       </ScrollView>
       <Button
@@ -127,5 +128,11 @@ const styles = StyleSheet.create({
   time: {
     fontSize: Sizes.large,
     color: Colors.dark.primary,
+  },
+  price: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: "auto",
+    color: Colors.light.primary,
   },
 });

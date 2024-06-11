@@ -27,7 +27,7 @@ const PaymentUrlProvider = ({ children }: PropsWithChildren) => {
         Toast.show({
           text1: "Tạo booking thành công",
         });
-        router.push("/payment");
+        router.push("/(payment)");
       }
     } catch (error) {
       throw new Error("Lỗi xảy ra trong lúc booking");

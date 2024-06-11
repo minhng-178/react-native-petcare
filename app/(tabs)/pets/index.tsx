@@ -10,17 +10,13 @@ import Button from "@/components/ui/Button";
 import PetListItem from "@/components/PetListItem";
 
 export default function PetScreen() {
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["userPets"],
     queryFn: getUserPets,
   });
 
-  if (isError) {
-    return (
-      <View>
-        <Text>Error: {error.message}</Text>
-      </View>
-    );
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
   }
 
   if (!data) {
@@ -29,10 +25,6 @@ export default function PetScreen() {
         <Text>No data available</Text>
       </View>
     );
-  }
-
-  if (isLoading) {
-    return <Loader isLoading={isLoading} />;
   }
 
   return (
