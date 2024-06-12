@@ -6,6 +6,8 @@ export const getBrands = async () => {
     const response = await axiosInstance.get(brandPath);
     if (response.status === 200) {
       return response.data.data;
+    } else {
+      return [];
     }
   } catch (error) {
     console.log("API Error:", error);

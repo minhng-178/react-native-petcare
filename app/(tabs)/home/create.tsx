@@ -118,12 +118,13 @@ const BookAppointment = () => {
     setIsLoading(true);
     try {
       const appointment = await createAppointment(form);
+
       if (appointment) {
         Toast.show({
           text1: "Đặt lịch hẹn thành công",
         });
         resetFields();
-        router.push(`/home/review?id=${appointment.id}`);
+        router.push(`/home/review?id=${appointment.appointment_id}`);
       }
     } catch (error) {
       throw new Error("Lỗi xảy ra trong quá trình đặt lịch hẹn");

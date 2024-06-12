@@ -67,7 +67,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const logout = async () => {
     await AsyncStorage.removeItem("user");
     await GoogleSignin.signOut();
-
+    await asyncStorage.clearToken();
     setUser(null);
     setIsAuth(false);
     router.push("/");

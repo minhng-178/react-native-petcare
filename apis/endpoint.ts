@@ -37,6 +37,10 @@ export const bookingUserPath = "booking/me/bookings";
 
 //? pet-appointment
 export const appointmentPath = "appointment";
+export const appointmentIdPath = (id: string) => {
+  return `appointment/${id}`;
+};
+export const appointmentUserPath = "appointment/user/my-appointments";
 
 //? upload
 export const uploadPath = "image/upload";

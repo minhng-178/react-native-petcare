@@ -4,8 +4,11 @@ import { serviceIdPath, servivePath } from "./endpoint";
 export const getServices = async () => {
   try {
     const response = await axiosInstance.get(servivePath);
+
     if (response.status === 200) {
       return response.data.data;
+    } else {
+      return [];
     }
   } catch (error) {
     console.log("API Error:", error);

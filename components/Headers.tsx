@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FlatList,
   Image,
@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useQuery } from "@tanstack/react-query";
 import { FontAwesome } from "@expo/vector-icons";
+
+import Loader from "./Loader";
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import Images from "@/constants/Images";
-import { useQuery } from "@tanstack/react-query";
 import { getBrands } from "@/apis/brand";
-import Loader from "./Loader";
 
 const cateTypes = [
   { name: "Thú y", image: Images.vet },
@@ -109,7 +110,7 @@ const Headers = () => {
               <View>
                 <Image
                   source={{
-                    uri: item.image || Images.petPlaceholder,
+                    uri: item?.image || Images.petPlaceholder,
                   }}
                   style={styles.brandImage}
                   resizeMode='cover'

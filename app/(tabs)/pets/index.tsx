@@ -8,9 +8,12 @@ import Colors from "@/constants/Colors";
 import Loader from "@/components/Loader";
 import Button from "@/components/ui/Button";
 import PetListItem from "@/components/PetListItem";
+import EmptyState from "@/components/EmptyState";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function PetScreen() {
-  const { data, isLoading, error } = useQuery({
+  const { auth } = useAuth();
+  const { data, isLoading } = useQuery({
     queryKey: ["userPets"],
     queryFn: getUserPets,
   });
@@ -19,11 +22,25 @@ export default function PetScreen() {
     return <Loader isLoading={isLoading} />;
   }
 
-  if (!data) {
+  if (!auth) {
     return (
-      <View>
-        <Text>No data available</Text>
-      </View>
+      <EmptyState
+        title='Lỗi rồi'
+        subtitle='Hiện tại bạn chưa đăng nhập'
+        navString='/sign-in'
+        textButton='Đăng nhập ngay'
+      />
+    );
+  }
+
+  if (!data || data.lenght === 0) {
+    return (
+      <EmptyState
+        title='Lỗi rồi'
+        subtitle='Hiện tại bạn chưa có thông tin thú cưng nào'
+        navString='pets/select'
+        textButton='Thêm mới thú cưng'
+      />
     );
   }
 

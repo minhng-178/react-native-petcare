@@ -3,6 +3,7 @@ import vet from "../assets/images/vet.png";
 import grooming from "../assets/images/grooming.png";
 import dog from "../assets/images/dog.png";
 import cat from "../assets/images/cat.png";
+import empty from "../assets/images/empty.png";
 const profile =
   "http://res.cloudinary.com/didw3mt8i/image/upload/v1716952555/tljhr4x60w7ct7enzmyg.jpg";
 
@@ -16,5 +17,6 @@ export default {
   profile,
   dog,
   cat,
+  empty,
   petPlaceholder,
 };

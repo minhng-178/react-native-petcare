@@ -6,7 +6,12 @@ export const getNotifications = async (userId: string) => {
 
   try {
     const response = await axiosInstance.get(notifyUserPath(userId));
-    return response.data.data;
+
+    if (response.status === 200) {
+      return response.data.data;
+    } else {
+      return [];
+    }
   } catch (error: any) {
     throw new Error(error);
   }

@@ -7,9 +7,10 @@ export const getUserPets = async () => {
 
     if (response.status === 200) {
       return response.data.data;
+    } else {
+      return [];
     }
   } catch (error: any) {
-    console.log("API Error:", error);
     throw new Error(error);
   }
 };
@@ -21,7 +22,6 @@ export const getPet = async (id: string) => {
       return response.data.data;
     }
   } catch (error: any) {
-    console.log("API Error:", error);
     throw new Error(error);
   }
 };
@@ -33,7 +33,6 @@ export const deletePet = async (id: string) => {
       return response.data.data;
     }
   } catch (error: any) {
-    console.log("API Error:", error);
     throw new Error(error);
   }
 };

@@ -52,7 +52,9 @@ instance.interceptors.response.use(
   async (response) => {
     if (response.config.url === "/auth/login" && response.status === 201) {
       const tokens = response.data.data.accessToken;
-
+      await asyncStorage.setToken(tokens);
+    } else if (response.config.url === "/auth/login-google-mobile") {
+      const tokens = response.data.data.accessToken;
       await asyncStorage.setToken(tokens);
     }
     return response;
