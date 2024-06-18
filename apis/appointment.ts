@@ -36,6 +36,7 @@ export const getAppointmentbyUser = async () => {
       return [];
     }
   } catch (error: any) {
-    throw new Error(error);
+    console.log(error);
+    return [];
   }
 };

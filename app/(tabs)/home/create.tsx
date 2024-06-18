@@ -4,16 +4,15 @@ import Button from "@/components/ui/Button";
 import Toast from "react-native-toast-message";
 import { Picker } from "@react-native-picker/picker";
 import { StyleSheet, Text, View } from "react-native";
-import { useMutation, useQueries } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import Colors from "@/constants/Colors";
-import Loader from "@/components/Loader";
 import { getUserPets } from "@/apis/pet";
+import { getService } from "@/apis/service";
 import CalendarVN from "@/components/CalendarVN";
 import { FontAwesome } from "@expo/vector-icons";
-import { getService } from "@/apis/service";
 import { createAppointment } from "@/apis/appointment";
 
 const BookAppointment = () => {
@@ -133,14 +132,6 @@ const BookAppointment = () => {
     }
   };
 
-  if (!pets) {
-    return (
-      <View>
-        <Text>No data available</Text>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
       <Stack.Screen options={{ headerTitle: "Đặt lịch hẹn" }} />
@@ -174,16 +165,22 @@ const BookAppointment = () => {
         />
       )}
 
-      <Picker
-        style={styles.input}
-        selectedValue={form.pet_id}
-        onValueChange={(itemValue) => setForm({ ...form, pet_id: itemValue })}
-      >
-        <Picker.Item label='Xin hãy chọn thú cưng của bạn' value={""} />
-        {pets?.map((pet: any) => (
-          <Picker.Item key={pet.id} label={pet.pet_name} value={pet.id} />
-        ))}
-      </Picker>
+      {pets ? (
+        <Picker
+          style={styles.input}
+          selectedValue={form.pet_id}
+          onValueChange={(itemValue) => setForm({ ...form, pet_id: itemValue })}
+        >
+          <Picker.Item label='Xin hãy chọn thú cưng của bạn' value={""} />
+          {pets?.map((pet: any) => (
+            <Picker.Item key={pet.id} label={pet.pet_name} value={pet.id} />
+          ))}
+        </Picker>
+      ) : (
+        <Text style={styles.input}>
+          Xin hãy thêm thông tin về thú cưng của bạn
+        </Text>
+      )}
 
       <Button
         style={{ marginTop: "auto" }}

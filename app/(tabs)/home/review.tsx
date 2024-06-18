@@ -50,16 +50,15 @@ const Review = () => {
 
       <View style={styles.textContainer}>
         <Text style={styles.title}>{data.service.service_name}</Text>
-        <Text style={styles.subtitle}>Pet Name: {data.pet.pet_name}</Text>
+        <Text style={styles.subtitle}>Tên thú nuôi: {data.pet.pet_name}</Text>
         <Text style={styles.subtitle}>
-          Appointment Date:{" "}
-          {format(new Date(data.appointment_date), "dd/MM/yyyy")}
+          Ngày hẹn: {format(new Date(data.appointment_date), "dd/MM/yyyy")}
         </Text>
         <Text style={styles.subtitle}>
-          Appointment Time: {data.appointment_time}
+          Thời gian hẹn: {data.appointment_time}
         </Text>
 
-        <Text style={styles.price}>Price: {data.service.price}</Text>
+        <Text style={styles.price}>Giá: {data.service.price}</Text>
       </View>
       <Button
         text={isLoading ? "Đang đặt..." : "Đặt ngay"}

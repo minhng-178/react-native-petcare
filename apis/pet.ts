@@ -11,7 +11,8 @@ export const getUserPets = async () => {
       return [];
     }
   } catch (error: any) {
-    throw new Error(error);
+    console.log(error);
+    return [];
   }
 };
 
@@ -42,6 +43,8 @@ export const createUserPets = async (
   petTypeId: string | null,
   image: any
 ) => {
+  console.log(form);
+
   try {
     const response = await axiosInstance.post(userCreatePetPath, {
       ...form,

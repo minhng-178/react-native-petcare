@@ -9,9 +9,23 @@ import Loader from "@/components/Loader";
 import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import Images from "@/constants/Images";
+import EmptyState from "@/components/EmptyState";
+import { useAuth } from "@/providers/AuthProvider";
 
 const ServiceDetailsScreen = () => {
   const { id } = useLocalSearchParams();
+  const { auth } = useAuth();
+
+  if (!auth) {
+    return (
+      <EmptyState
+        title='Lỗi rồi'
+        subtitle='Hiện tại bạn chưa đăng nhập'
+        navString='/sign-in'
+        textButton='Đăng nhập ngay'
+      />
+    );
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: ["service"],
@@ -29,7 +43,11 @@ const ServiceDetailsScreen = () => {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Stack.Screen options={{ title: `${data.service_name}` }} />
+        <Stack.Screen
+          options={{
+            title: data ? `${data.service_name}` : "Thông tin dịch vụ",
+          }}
+        />
         <Image
           source={{ uri: data.image || Images.petPlaceholder }}
           style={styles.image}

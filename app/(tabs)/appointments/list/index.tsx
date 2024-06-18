@@ -10,14 +10,6 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 
 export default function BookingScreen() {
   const { auth } = useAuth();
-  const { data, isLoading } = useQuery({
-    queryKey: ["bookings"],
-    queryFn: getUserBooking,
-  });
-
-  if (isLoading) {
-    return <Loader isLoading={isLoading} />;
-  }
 
   if (!auth) {
     return (
@@ -28,6 +20,15 @@ export default function BookingScreen() {
         textButton='Đăng nhập ngay'
       />
     );
+  }
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["bookings"],
+    queryFn: getUserBooking,
+  });
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
   }
 
   if (!data || data.lenght === 0) {

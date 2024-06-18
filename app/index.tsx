@@ -17,7 +17,7 @@ export default function Welcome() {
         if (!welcomeShown) {
           await AsyncStorage.setItem("welcomeShown", "true");
         } else {
-          router.push("/(tabs)/home");
+          router.navigate("/(tabs)/home");
         }
       } catch (error) {
         console.log("Error checking welcome status:", error);

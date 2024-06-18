@@ -33,14 +33,14 @@ export const serviceIdPath = (id: string) => {
 };
 //? pet-booking
 export const bookingPath = "booking";
-export const bookingUserPath = "booking/me/bookings";
+export const bookingUserPath = "booking/customer/my-bookings";
 
 //? pet-appointment
 export const appointmentPath = "appointment";
 export const appointmentIdPath = (id: string) => {
   return `appointment/${id}`;
 };
-export const appointmentUserPath = "appointment/user/my-appointments";
+export const appointmentUserPath = "appointment/customer/my-appointments";
 
 //? upload
 export const uploadPath = "image/upload";

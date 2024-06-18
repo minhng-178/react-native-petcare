@@ -13,14 +13,6 @@ import { useAuth } from "@/providers/AuthProvider";
 
 export default function PetScreen() {
   const { auth } = useAuth();
-  const { data, isLoading } = useQuery({
-    queryKey: ["userPets"],
-    queryFn: getUserPets,
-  });
-
-  if (isLoading) {
-    return <Loader isLoading={isLoading} />;
-  }
 
   if (!auth) {
     return (
@@ -31,6 +23,15 @@ export default function PetScreen() {
         textButton='Đăng nhập ngay'
       />
     );
+  }
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["userPets"],
+    queryFn: getUserPets,
+  });
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
   }
 
   if (!data || data.lenght === 0) {

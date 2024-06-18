@@ -68,6 +68,9 @@ export const loginWithGoogle = async (user: any) => {
 
   try {
     const response = await axiosInstance.post(loginGooglePath, data);
+
+    console.log(response.data);
+
     const tokens = response.data.data.accessToken;
     console.log(tokens, "login google");
 

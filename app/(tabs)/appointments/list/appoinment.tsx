@@ -12,14 +12,6 @@ import { useAuth } from "@/providers/AuthProvider";
 
 const AppointmentScreen = () => {
   const { auth } = useAuth();
-  const { data, isLoading } = useQuery({
-    queryKey: ["appointments"],
-    queryFn: getAppointmentbyUser,
-  });
-
-  if (isLoading) {
-    return <Loader isLoading={isLoading} />;
-  }
 
   if (!auth) {
     return (
@@ -30,6 +22,15 @@ const AppointmentScreen = () => {
         textButton='Đăng nhập ngay'
       />
     );
+  }
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["appointments"],
+    queryFn: getAppointmentbyUser,
+  });
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
   }
 
   if (!data || data.lenght === 0) {

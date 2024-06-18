@@ -7,9 +7,21 @@ import Loader from "@/components/Loader";
 import { getNotifications } from "@/apis/notify";
 import { useAuth } from "@/providers/AuthProvider";
 import NotifyListItem from "@/components/NotifyListItem";
+import EmptyState from "@/components/EmptyState";
 
 export default function ModalScreen() {
-  const { user } = useAuth();
+  const { user, auth } = useAuth();
+
+  if (!auth) {
+    return (
+      <EmptyState
+        title='Lỗi rồi'
+        subtitle='Hiện tại bạn chưa đăng nhập'
+        navString='/sign-in'
+        textButton='Đăng nhập ngay'
+      />
+    );
+  }
 
   const { data, isLoading } = useQuery({
     queryKey: ["Notify"],
