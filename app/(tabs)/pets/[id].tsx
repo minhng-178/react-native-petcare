@@ -12,12 +12,10 @@ import Shadows from "@/constants/Shadows";
 import Button from "@/components/ui/Button";
 import { deletePet, getPet } from "@/apis/pet";
 import { calculateAge } from "@/utils/dateFormat";
-import { useIsFocused } from "@react-navigation/native";
-import { useEffect, useRef } from "react";
 
 const PetDetailsScreen = () => {
   const { id } = useLocalSearchParams();
-  const { data, isLoading, refetch, isRefetching } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["pet", id],
     queryFn: () => {
       if (typeof id === "string") {
@@ -35,22 +33,8 @@ const PetDetailsScreen = () => {
     },
   });
 
-  const isFocus = useIsFocused();
-  const prevIsFocus = useRef(isFocus);
-
-  useEffect(() => {
-    if (!prevIsFocus.current && isFocus) {
-      refetch();
-    }
-    prevIsFocus.current = isFocus;
-  }, [isFocus]);
-
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
-  }
-
-  if (isRefetching) {
-    return <Loader isLoading={isRefetching} />;
   }
 
   return (

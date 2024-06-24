@@ -33,7 +33,7 @@ const AppointmentScreen = () => {
     return <Loader isLoading={isLoading} />;
   }
 
-  if (!data || data.lenght === 0) {
+  if (!data || data.length === 0) {
     return (
       <EmptyState
         title='Lỗi rồi'
@@ -45,14 +45,25 @@ const AppointmentScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Stack.Screen options={{ title: "Lịch hẹn" }} />
-      <FlatList
-        data={data}
-        renderItem={({ item }) => <AppoinmentListItem appointment={item} />}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <>
+      {!data || data.length === 0 ? (
+        <EmptyState
+          title='Lỗi rồi'
+          subtitle='Hiện tại bạn chưa có thông tin lịch book nào'
+          navString='home'
+          textButton='Thêm mới lịch book'
+        />
+      ) : (
+        <View style={styles.container}>
+          <Stack.Screen options={{ title: "Lịch hẹn" }} />
+          <FlatList
+            data={data}
+            renderItem={({ item }) => <AppoinmentListItem appointment={item} />}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      )}
+    </>
   );
 };
 

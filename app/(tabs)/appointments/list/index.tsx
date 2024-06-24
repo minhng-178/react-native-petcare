@@ -27,11 +27,7 @@ export default function BookingScreen() {
     queryFn: getUserBooking,
   });
 
-  if (isLoading) {
-    return <Loader isLoading={isLoading} />;
-  }
-
-  if (!data || data.lenght === 0) {
+  if (!data || data.length === 0) {
     return (
       <EmptyState
         title='Lỗi rồi'
@@ -40,6 +36,10 @@ export default function BookingScreen() {
         textButton='Thêm mới lịch book'
       />
     );
+  }
+
+  if (isLoading) {
+    return <Loader isLoading={isLoading} />;
   }
 
   return (

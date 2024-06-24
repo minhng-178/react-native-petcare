@@ -81,13 +81,13 @@ const AddPetScreen = () => {
       setForm({
         ...form,
         pet_name: updatingPet.pet_name,
-        pet_breed_id: updatingPet.pet_breed_id,
+        pet_breed_id: updatingPet.petBreed.id,
         pet_dob: new Date(updatingPet.pet_dob),
         weight: updatingPet.weight.toString(),
         height: updatingPet.height.toString(),
         image: updatingPet.image,
       });
-      setPetTypeId(updatingPet.pet_type_id);
+      setPetTypeId(updatingPet.petType.id);
       setImage(updatingPet.image);
     }, [updatingPet]);
   }

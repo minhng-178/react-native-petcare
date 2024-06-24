@@ -30,6 +30,8 @@ export const getAppointmentById = async (id: string) => {
 export const getAppointmentbyUser = async () => {
   try {
     const response = await axiosInstance.get(appointmentUserPath);
+    console.log(response.data);
+
     if (response.status === 200) {
       return response.data.data;
     } else {
