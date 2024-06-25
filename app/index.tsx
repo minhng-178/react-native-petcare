@@ -40,7 +40,11 @@ export default function Welcome() {
             <Text style={styles.title}>Fur-ever Friend</Text>
             <Text style={styles.subTitle}>dịch vụ chăm sóc thú cưng</Text>
           </View>
-          <Image source={require("../assets/images/logo.png")} />
+          <Image
+            source={{
+              uri: "https://res.cloudinary.com/dqqfmuomk/image/upload/v1719322593/logo_uixlmp.jpg",
+            }}
+          />
           <Button
             style={styles.button}
             text='Đăng nhập'
