@@ -1,15 +1,21 @@
-import { getUserBooking } from "@/apis/booking";
-import BookingListItem from "@/components/BookingListItem";
-import EmptyState from "@/components/EmptyState";
-import Loader from "@/components/Loader";
-import Colors from "@/constants/Colors";
+import { FlatList, StyleSheet, View } from "react-native";
+
 import Sizes from "@/constants/Sizes";
-import { useAuth } from "@/providers/AuthProvider";
+import Colors from "@/constants/Colors";
+import Loader from "@/components/Loader";
+import EmptyState from "@/components/EmptyState";
+import BookingListItem from "@/components/BookingListItem";
+
+import { getUserBooking } from "@/apis/booking";
 import { useQuery } from "@tanstack/react-query";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function BookingScreen() {
   const { auth } = useAuth();
+  const { data, isLoading } = useQuery({
+    queryKey: ["bookings"],
+    queryFn: getUserBooking,
+  });
 
   if (!auth) {
     return (
@@ -21,11 +27,6 @@ export default function BookingScreen() {
       />
     );
   }
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["bookings"],
-    queryFn: getUserBooking,
-  });
 
   if (!data || data.length === 0) {
     return (
@@ -46,7 +47,9 @@ export default function BookingScreen() {
     <View style={styles.container}>
       <FlatList
         data={data}
-        renderItem={({ item }) => <BookingListItem booking={item} />}
+        renderItem={({ item, index }) => (
+          <BookingListItem booking={item} index={index} />
+        )}
         showsVerticalScrollIndicator={false}
       />
     </View>

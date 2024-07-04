@@ -1,4 +1,4 @@
-rootProject.name = 'react-native-petcare-app'
+rootProject.name = 'Furever Friends'
 
 dependencyResolutionManagement {
   versionCatalogs {

@@ -86,7 +86,12 @@ const PetDetailsScreen = () => {
         />
         <Text style={styles.textHeader}>Về thú cưng</Text>
       </View>
-      <View style={[styles.rowContainer, { justifyContent: "space-between" }]}>
+      <View
+        style={[
+          styles.rowContainer,
+          { justifyContent: "space-between", gap: 2 },
+        ]}
+      >
         <View style={styles.card}>
           <Text style={styles.textSubTitle}>Tuổi</Text>
           <Text style={styles.textSubContent}>
