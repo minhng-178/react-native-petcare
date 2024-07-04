@@ -44,6 +44,7 @@ export default function Welcome() {
             source={{
               uri: "https://res.cloudinary.com/dqqfmuomk/image/upload/v1719322593/logo_uixlmp.jpg",
             }}
+            style={{ width: "100%", aspectRatio: 1 }}
           />
           <Button
             style={styles.button}
