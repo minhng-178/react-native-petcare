@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   brandImage: {
     alignSelf: "center",
     aspectRatio: 1,
-    width: 200,
+    width: 150,
     borderRadius: Sizes.small,
   },
 });
