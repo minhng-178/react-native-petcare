@@ -1,8 +1,11 @@
 import axiosInstance from "./axiosInstance";
 import { bookingPath, bookingUserPath } from "./endpoint";
 export const createBooking = async (form: any) => {
+  console.log(form);
+
   try {
     const response = await axiosInstance.post(bookingPath, form);
+    console.log(response.data);
 
     return response.data.data;
   } catch (error: any) {

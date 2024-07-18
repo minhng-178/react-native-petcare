@@ -1,15 +1,14 @@
+import { format } from "date-fns";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams } from "expo-router";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
-import Sizes from "@/constants/Sizes";
 import Colors from "@/constants/Colors";
 import Images from "@/constants/Images";
 import Button from "@/components/ui/Button";
 import { getAppointmentById } from "@/apis/appointment";
 import { usePaymentUrl } from "@/providers/PaymentProvider";
-import { format } from "date-fns";
 import Loader from "@/components/Loader";
 import Shadows from "@/constants/Shadows";
 
@@ -40,7 +39,7 @@ const Review = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Stack.Screen options={{ title: "Review lịch hẹn" }} />
       <Image
         source={{ uri: data?.pet.image || Images.petPlaceholder }}
@@ -64,7 +63,7 @@ const Review = () => {
         text={isLoading ? "Đang đặt..." : "Đặt ngay"}
         onPress={onSubmit}
       />
-    </View>
+    </ScrollView>
   );
 };
 
